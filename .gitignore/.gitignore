@@ -1,0 +1,4 @@
+*.*_cache
+.pyc
+.log
+*.idea
