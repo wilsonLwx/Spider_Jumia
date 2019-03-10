@@ -15,13 +15,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 class JumiaSpider(scrapy.Spider):
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
-    base_url = 'https://www.jumia.com.ng/'
+    # base_url = 'https://www.jumia.com.ng/'
+    # format()括号里输入关键字极客爬取
+    base_url = 'https://www.jumia.com.ng/catalog/?q={}'.format('computer')
     start_urls = [base_url]
     page = 1
 
     def parse(self, response):
         sub_urls = []
-
         category_list = response.xpath('//*[@id="menuFixed"]/ul/li/a/@href').extract()
         for category in category_list:
             if 'computing' in category:
@@ -48,6 +49,7 @@ class JumiaSpider(scrapy.Spider):
             yield scrapy.Request(url=sub_url, callback=self.detail_parse)
 
     def detail_parse(self, response):
+
         # 商品类表页url
         detail_urls = response.xpath('/html/body/main/section/section[2]/div/a/@href').extract()
         for detail_url in detail_urls:
@@ -116,6 +118,16 @@ class JumiaSpider(scrapy.Spider):
             else:
                 item_dict['ProductMeasures'] = ''
 
+            product_el1 = re.findall(r'Product Line</div>.*?>(.*?)</div>?', product_details, re.S)
+            product_el2 = re.findall(r'Product Line</div>.*?>(.*?)</div>?', product_description_tab, re.S)
+
+            if size_el1:
+                item_dict['ProductLine'] = product_el1[0]
+            elif size_el2:
+                item_dict['ProductLine'] = product_el2[0]
+            else:
+                item_dict['ProductLine'] = ''
+
             cat_str_list = data_element.xpath('./nav/ul/li/a/text()').extract()
             # 调用读取对比文件category_tree_export.csv的方法
             new_list = read_csv(os.path.join(BASE_DIR, 'conf/category_tree_export.csv'))
@@ -147,7 +159,6 @@ class JumiaSpider(scrapy.Spider):
             item_dict['ProductId'] = ''
             item_dict['Model'] = ''
             item_dict['ProductWarranty'] = 'N/A'
-            item_dict['ProductLine'] = ''
 
             yield item_dict
         else:
