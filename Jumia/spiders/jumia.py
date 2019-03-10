@@ -6,7 +6,7 @@ import os
 import scrapy
 
 from Jumia.items import JumiaItem
-from utils.get_conf_data import get_category_id
+from utils.get_conf_data import get_category_id, get_kw_url
 from utils.write_csv_func import read_csv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
@@ -15,10 +15,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 class JumiaSpider(scrapy.Spider):
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
-    # 主页开始爬取 请开启此段代码 注释掉下段代码
-    # base_url = 'https://www.jumia.com.ng/'
-    # format()括号里输入关键字即可根据关键字爬取 但请先注释掉上段代码
-    base_url = 'https://www.jumia.com.ng/catalog/?q={}'.format('computer')
+    # 主页开始爬取 请开启此段代码
+    base_url = 'https://www.jumia.com.ng/'
     start_urls = [base_url]
     page = 1
 
@@ -36,16 +34,21 @@ class JumiaSpider(scrapy.Spider):
             yield scrapy.Request(url=sub_url, meta={'sub_url': sub_url}, callback=self.second_parse)
 
     def second_parse(self, response):
+        # 如果需要关键字爬取 请打开此段代码 注释掉下两段代码
+        sub_url, page = get_kw_url('computer')
         # 获取第一页的数据
-        page = response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()
+        # page = response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()
+        # 获取商品页的url
+        # sub_url = response.meta.get('sub_url')
+
+        # 取最大页数
         page_count = int(page[-2])
-        sub_url = response.meta.get('sub_url')
         # 循环累计添加页数
         for i in range(1, page_count + 1):
-            re_url = re.match(r'(https://www.jumia.com.ng/.*/)?.*', sub_url)
+            re_url = re.findall(r'(https://www.jumia.com.ng/.*/)?.*', sub_url)
             # 如果有值 取值
-            if re_url is not None:
-                sub_url = re_url.group(1)
+            if re_url:
+                sub_url = re_url[0]
             sub_url = sub_url + '?page={}'.format(i)
             yield scrapy.Request(url=sub_url, callback=self.detail_parse)
 
@@ -148,9 +151,16 @@ class JumiaSpider(scrapy.Spider):
             item_dict['PackageContent'] = ''.join(
                 data_element.xpath('//*[@id="product-details"]/div[2]/node()').extract())
 
-            variation = data_element.xpath('./section[1]/div[2]/div[1]/div[7]/div[1]/div[1]/span/node').extract()
+            variation = data_element.xpath(
+                '/html/body/main/section[1]/div[2]/div[1]/div[6]/div/div[1]/span/node()').extract()
             if variation:
-                item_dict['Variation'] = ''.join(variation)
+                if len(variation) >= 2:
+                    if variation[0] != '...':
+                        item_dict['Variation'] = variation[0]
+                    else:
+                        item_dict['Variation'] = variation[1]
+                else:
+                    item_dict['Variation'] = variation[0]
             else:
                 item_dict['Variation'] = ''
 

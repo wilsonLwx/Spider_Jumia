@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5004137e-d5dc-45e0-8067-78d603be3ba9" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/html.txt" afterPath="" />
       <change type="DELETED" beforePath="$PROJECT_DIR$/test2.csv" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Jumia/spiders/jumia.py" afterPath="$PROJECT_DIR$/Jumia/spiders/jumia.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/get_conf_data.py" afterPath="$PROJECT_DIR$/utils/get_conf_data.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,8 +22,8 @@
       <file leaf-file-name="jumia.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Jumia/spiders/jumia.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="317">
-              <caret line="128" column="45" lean-forward="true" selection-start-line="120" selection-start-column="12" selection-end-line="128" selection-end-column="45" />
+            <state relative-caret-position="302">
+              <caret line="160" column="60" lean-forward="false" selection-start-line="160" selection-start-column="60" selection-end-line="160" selection-end-column="60" />
               <folding>
                 <element signature="e#24#38#0" expanded="true" />
               </folding>
@@ -54,8 +54,8 @@
       <file leaf-file-name="get_conf_data.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/utils/get_conf_data.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="638">
-              <caret line="34" column="34" lean-forward="false" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
+            <state relative-caret-position="814">
+              <caret line="44" column="4" lean-forward="false" selection-start-line="44" selection-start-column="4" selection-end-line="44" selection-end-column="4" />
               <folding>
                 <element signature="e#51#65#0" expanded="true" />
               </folding>
@@ -109,6 +109,7 @@
       <find>product-description</find>
       <find>product-details</find>
       <find>fields</find>
+      <find>Variation</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -412,7 +413,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32957748" sideWeight="0.49713877" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Remote Host" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1802543" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18922962" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -758,16 +759,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils/get_conf_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="638">
-          <caret line="34" column="34" lean-forward="false" selection-start-line="34" selection-start-column="34" selection-end-line="34" selection-end-column="34" />
-          <folding>
-            <element signature="e#51#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Jumia/pipelines.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -801,10 +792,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/utils/get_conf_data.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="814">
+          <caret line="44" column="4" lean-forward="false" selection-start-line="44" selection-start-column="4" selection-end-line="44" selection-end-column="4" />
+          <folding>
+            <element signature="e#51#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Jumia/spiders/jumia.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="317">
-          <caret line="128" column="45" lean-forward="true" selection-start-line="120" selection-start-column="12" selection-end-line="128" selection-end-column="45" />
+        <state relative-caret-position="302">
+          <caret line="160" column="60" lean-forward="false" selection-start-line="160" selection-start-column="60" selection-end-line="160" selection-end-column="60" />
           <folding>
             <element signature="e#24#38#0" expanded="true" />
           </folding>
