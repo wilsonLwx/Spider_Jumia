@@ -36,6 +36,8 @@ class JumiaSpider(scrapy.Spider):
     def second_parse(self, response):
         # 如果需要关键字爬取 请打开此段代码 注释掉下两段代码
         sub_url, page = get_kw_url('computer')
+
+        # 如果想整页爬取 请注释掉关键字查询代码 打开下两段代码
         # 获取第一页的数据
         # page = response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()
         # 获取商品页的url
@@ -151,8 +153,10 @@ class JumiaSpider(scrapy.Spider):
             item_dict['PackageContent'] = ''.join(
                 data_element.xpath('//*[@id="product-details"]/div[2]/node()').extract())
 
+            # 获取variation字段所有内容
             variation = data_element.xpath(
                 '/html/body/main/section[1]/div[2]/div[1]/div[6]/div/div[1]/span/node()').extract()
+            # 对内容进行筛选
             if variation:
                 if len(variation) >= 2:
                     if variation[0] != '...':
@@ -161,6 +165,7 @@ class JumiaSpider(scrapy.Spider):
                         item_dict['Variation'] = variation[1]
                 else:
                     item_dict['Variation'] = variation[0]
+            # 如果该字段没有内容 设置为空串
             else:
                 item_dict['Variation'] = ''
 
