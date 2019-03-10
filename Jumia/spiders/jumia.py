@@ -15,8 +15,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 class JumiaSpider(scrapy.Spider):
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
+    # 主页开始爬取 请开启此段代码 注释掉下段代码
     # base_url = 'https://www.jumia.com.ng/'
-    # format()括号里输入关键字极客爬取
+    # format()括号里输入关键字即可根据关键字爬取 但请先注释掉上段代码
     base_url = 'https://www.jumia.com.ng/catalog/?q={}'.format('computer')
     start_urls = [base_url]
     page = 1
