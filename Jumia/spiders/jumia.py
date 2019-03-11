@@ -77,7 +77,7 @@ class JumiaSpider(scrapy.Spider):
         # local 卖家
         # express_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
         # global_label = response.xpath(
-        #     '/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()[1]  # 解析数据 将数据存入管道 xpath做了封装 返回list
+        #     '/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()  # 解析数据 将数据存入管道 xpath做了封装 返回list
         # if not (express_label and global_label):
 
             data_list = response.xpath('/html/body/main')
