@@ -72,7 +72,6 @@ class JumiaSpider(scrapy.Spider):
 
         # 全球卖家
         no_label = response.xpath('/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()
-        print('--------->', no_label)
         if '  Shipped from overseas ' in no_label:
 
         # local 卖家
