@@ -63,12 +63,24 @@ class JumiaSpider(scrapy.Spider):
 
     def finaly_parse(self, response):
         base_url = response.url
-        # 不采集标签
-        no_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
 
-        # 如果不是以上标签，就执行采集任务
-        if no_label != 'osh-icon -jumia-express shop_express--logo':
-            # 解析数据 将数据存入管道 xpath做了封装 返回list
+        # 下面为三种卖家的情况 需要哪个就开启那段代码 其余注释掉
+
+        # 海外仓
+        # no_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
+        # if no_label == 'osh-icon -jumia-express shop_express--logo':
+
+        # 全球卖家
+        no_label = response.xpath('/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()
+        print('--------->', no_label)
+        if '  Shipped from overseas ' in no_label:
+
+        # local 卖家
+        # express_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
+        # global_label = response.xpath(
+        #     '/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()[1]  # 解析数据 将数据存入管道 xpath做了封装 返回list
+        # if not (express_label and global_label):
+
             data_list = response.xpath('/html/body/main')
             data_element = data_list[0]
             item_dict = JumiaItem()
@@ -127,9 +139,9 @@ class JumiaSpider(scrapy.Spider):
             product_el1 = re.findall(r'Product Line</div>.*?>(.*?)</div>?', product_details, re.S)
             product_el2 = re.findall(r'Product Line</div>.*?>(.*?)</div>?', product_description_tab, re.S)
 
-            if size_el1:
+            if product_el1:
                 item_dict['ProductLine'] = product_el1[0]
-            elif size_el2:
+            elif product_el2:
                 item_dict['ProductLine'] = product_el2[0]
             else:
                 item_dict['ProductLine'] = ''
