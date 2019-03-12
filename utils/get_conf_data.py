@@ -51,7 +51,8 @@ def get_kw_url(kw):
     }
     import urllib.request
 
-    sub_url = 'https://www.jumia.com.ng/catalog/?q={}'.format(kw)
+    # sub_url = 'https://www.jumia.com.ng/catalog/?q={}'.format(kw)
+    sub_url = 'https://www.jumia.com.ng/health-beauty/?q=dildo&price=2000-147666'
     rq = urllib.request.Request(sub_url, headers=headers)
     res = urllib.request.urlopen(rq)
 

@@ -15,44 +15,66 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 class JumiaSpider(scrapy.Spider):
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
-    # 主页开始爬取 请开启此段代码
-    base_url = 'https://www.jumia.com.ng/'
+    # 此处更换 爬取url
+    base_url = 'https://www.jumia.com.ng/adult-toys/?shipped_from=jumia_global&sort=newest&dir=desc&price=3500-165539'
     start_urls = [base_url]
-    page = 1
+
+
+    # def parse(self, response):
+    #     sub_urls = []
+    #     category_list = response.xpath('//*[@id="menuFixed"]/ul/li/a/@href').extract()
+    #     for category in category_list:
+    #         if 'computing' in category:
+    #             sub_urls.append(category)
+    #         elif 'electronics' in category:
+    #             sub_urls.append(category)
+    #         elif 'video-games' in category:
+    #             sub_urls.append(category)
+    #     for sub_url in sub_urls:
+    #         yield scrapy.Request(url=sub_url, meta={'sub_url': sub_url}, callback=self.second_parse)
+    #
+    # def second_parse(self, response):
+    #     # 如果需要关键字爬取 请打开此段代码 注释掉下两段代码
+    #     sub_url, page = get_kw_url('computer')
+    #
+    #     # 如果想整页爬取 请注释掉关键字查询代码 打开下两段代码
+    #     # 获取第一页的数据
+    #     # page = response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()
+    #     # 获取商品页的url
+    #     # sub_url = response.meta.get('sub_url')
+    #
+    #     # 取最大页数
+    #     page_count = int(page[-2])
+    #     # 循环累计添加页数
+    #     for i in range(1, page_count + 1):
+    #         re_url = re.findall(r'(https://www.jumia.com.ng/.*/)?.*', sub_url)
+    #         # 如果有值 取值
+    #         if re_url:
+    #             sub_url = re_url[0]
+    #         sub_url = sub_url + '?page={}'.format(i)
+    #         yield scrapy.Request(url=sub_url, callback=self.detail_parse)
+
+    page = 0
 
     def parse(self, response):
-        sub_urls = []
-        category_list = response.xpath('//*[@id="menuFixed"]/ul/li/a/@href').extract()
-        for category in category_list:
-            if 'computing' in category:
-                sub_urls.append(category)
-            elif 'electronics' in category:
-                sub_urls.append(category)
-            elif 'video-games' in category:
-                sub_urls.append(category)
-        for sub_url in sub_urls:
-            yield scrapy.Request(url=sub_url, meta={'sub_url': sub_url}, callback=self.second_parse)
 
-    def second_parse(self, response):
-        # 如果需要关键字爬取 请打开此段代码 注释掉下两段代码
-        sub_url, page = get_kw_url('computer')
+        str_ = response.url
+        total_page = int(response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()[-2])
+        for page in range(1, total_page + 1):
+            self.page += 1
+            index = str_.find('&page=')
+            if index != -1:
+                rq_url = str_[:index]
+                rq_url = rq_url + '&page={}'.format(self.page)
 
-        # 如果想整页爬取 请注释掉关键字查询代码 打开下两段代码
-        # 获取第一页的数据
-        # page = response.xpath('/html/body/main/section/section[1]/div/div[2]/ul/li/a/@title').extract()
-        # 获取商品页的url
-        # sub_url = response.meta.get('sub_url')
+            else:
+                res = re.match(r'http.*?\?\w+=\w+', str_)
+                if res:
+                    rq_url = str_ + '&page={}'.format(self.page)
+                else:
+                    rq_url = str_ + '?page={}'.format(self.page)
 
-        # 取最大页数
-        page_count = int(page[-2])
-        # 循环累计添加页数
-        for i in range(1, page_count + 1):
-            re_url = re.findall(r'(https://www.jumia.com.ng/.*/)?.*', sub_url)
-            # 如果有值 取值
-            if re_url:
-                sub_url = re_url[0]
-            sub_url = sub_url + '?page={}'.format(i)
-            yield scrapy.Request(url=sub_url, callback=self.detail_parse)
+            yield scrapy.Request(url=rq_url, callback=self.detail_parse)
 
     def detail_parse(self, response):
 
