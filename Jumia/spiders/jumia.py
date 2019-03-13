@@ -19,7 +19,6 @@ class JumiaSpider(scrapy.Spider):
     base_url = 'https://www.jumia.com.ng/adult-toys/?shipped_from=jumia_global&sort=newest&dir=desc&price=3500-165539'
     start_urls = [base_url]
 
-
     # def parse(self, response):
     #     sub_urls = []
     #     category_list = response.xpath('//*[@id="menuFixed"]/ul/li/a/@href').extract()
@@ -96,11 +95,11 @@ class JumiaSpider(scrapy.Spider):
         no_label = response.xpath('/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()
         if '  Shipped from overseas ' in no_label:
 
-        # local 卖家
-        # express_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
-        # global_label = response.xpath(
-        #     '/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()  # 解析数据 将数据存入管道 xpath做了封装 返回list
-        # if not (express_label and global_label):
+            # local 卖家
+            # express_label = response.xpath('/html/body/main/section[1]/div[2]/div[1]/div[6]/div[1]/span/span/@class')
+            # global_label = response.xpath(
+            #     '/html/body/main/section[1]/div[2]/div[2]/div/div[1]/text()').extract()  # 解析数据 将数据存入管道 xpath做了封装 返回list
+            # if not (express_label and global_label):
 
             data_list = response.xpath('/html/body/main')
             data_element = data_list[0]
@@ -175,10 +174,21 @@ class JumiaSpider(scrapy.Spider):
             sku_id = get_category_id(new_str, new_list)
             item_dict['PrimaryCategory'] = sku_id
 
-            item_dict['SalePrice'] = ' '.join(data_element.xpath(
-                '//*[@class="price-box"]/div[1]/span/span/text()').extract())
-            item_dict['Price'] = ' '.join(data_element.xpath('//*[@class="price-box"]/span/span/text()').extract())
-            item_dict['MainImage'] = ','.join(data_element.xpath('//*[@class="media"]/div[1]/div/a/@href').extract())
+            item_dict['SalePrice'] = data_element.xpath(
+                '//*[@class="price-box"]/div[1]/span/span[2]/text()').extract_first()
+            item_dict['Price'] = data_element.xpath('//*[@class="price-box"]/span/span[2]/text()').extract_first()
+            image_list = data_element.xpath('//*[@class="media"]/div[1]/div/a/@href').extract()
+
+
+            item_dict['MainImage'] = image_list[0] if len(image_list) >= 1 else ''
+            item_dict['Image2'] = image_list[1] if len(image_list) >= 2 else ''
+            item_dict['Image3'] = image_list[2] if len(image_list) >= 3 else ''
+            item_dict['Image4'] = image_list[3] if len(image_list) >= 4 else ''
+            item_dict['Image5'] = image_list[4] if len(image_list) >= 5 else ''
+            item_dict['Image6'] = image_list[5] if len(image_list) >= 6 else ''
+            item_dict['Image7'] = image_list[6] if len(image_list) >= 7 else ''
+            item_dict['Image8'] = image_list[7] if len(image_list) >= 8 else ''
+
             item_dict['Description'] = ''.join(data_element.xpath('//*[@id="productDescriptionTab"]/node()').extract())
             item_dict['ShortDescription'] = ''.join(
                 data_element.xpath('//*[@id="product-details"]/div[1]/node()').extract())
@@ -203,7 +213,7 @@ class JumiaSpider(scrapy.Spider):
                 item_dict['Variation'] = ''
 
             item_dict['Quantity'] = 50
-            item_dict['SaleStartDate'] = '209-01-28'
+            item_dict['SaleStartDate'] = '2019-01-28'
             item_dict['SaleEndDate'] = '2030-01-28'
             item_dict['ProductId'] = ''
             item_dict['Model'] = ''
