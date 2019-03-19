@@ -16,9 +16,9 @@ class JumiaSpider(scrapy.Spider):
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
     # 此处更换 爬取url
-    base_url = 'https://www.jumia.com.ng/adult-toys/?shipped_from=jumia_global&sort=newest&dir=desc&price=3500-165539'
+    base_url = 'https://www.jumia.com.ng/category-fashion-by-jumia/'
     start_urls = [base_url]
-
+    temp_list = []
     # def parse(self, response):
     #     sub_urls = []
     #     category_list = response.xpath('//*[@id="menuFixed"]/ul/li/a/@href').extract()
@@ -84,7 +84,12 @@ class JumiaSpider(scrapy.Spider):
 
     def finaly_parse(self, response):
         base_url = response.url
-
+        seller_sku = re.match(r'.*?(\d+)\.html', base_url).group(1)
+        # 对于seller_sku重复的 去重
+        if seller_sku not in self.temp_list:
+            self.temp_list.append(seller_sku)
+        else:
+            return
         # 下面为三种卖家的情况 需要哪个就开启那段代码 其余注释掉
 
         # 海外仓
@@ -104,14 +109,16 @@ class JumiaSpider(scrapy.Spider):
             data_list = response.xpath('/html/body/main')
             data_element = data_list[0]
             item_dict = JumiaItem()
-            item_dict['SellerSku'] = re.match(r'.*?(\d+)\.html', base_url).group(1)
+            item_dict['SellerSku'] = seller_sku
             item_dict['ParentSku'] = item_dict['SellerSku']
             str_ = data_element.xpath('./section[1]/div[2]/div[1]/span/h1/text()')[0].extract()
             item_dict['Name'] = re.match(r'.*? (.*)', str_).group(1)
             item_dict['Keywrds'] = item_dict['Name']
             item_dict['Brand'] = data_element.xpath('./section[1]/div[2]/div[1]/div[1]/a/text()').extract_first()
-            product_details = data_element.xpath('//*[@id="product-details"]').extract_first()
+            pd = data_element.xpath('//*[@id="product-details"]').extract_first()
+            product_details = pd if pd is not None else ''
             product_description_tab = data_element.xpath('//*[@id="productDescriptionTab"]').extract_first()
+
             # 查找产品详情或者描述下那个包含Color
             color_el1 = re.findall(r'Colour</div>.*?>(.*?)</div>?', product_details, re.S)
             color_el2 = re.findall(r'Colour</div>.*?>(.*?)</div>?', product_description_tab, re.S)
@@ -176,9 +183,9 @@ class JumiaSpider(scrapy.Spider):
 
             item_dict['SalePrice'] = data_element.xpath(
                 '//*[@class="price-box"]/div[1]/span/span[2]/text()').extract_first()
-            item_dict['Price'] = data_element.xpath('//*[@class="price-box"]/span/span[2]/text()').extract_first()
+            price = data_element.xpath('//*[@class="price-box"]/span/span[2]/text()').extract_first()
+            item_dict['Price'] = price if price else item_dict['SalePrice']
             image_list = data_element.xpath('//*[@class="media"]/div[1]/div/a/@href').extract()
-
 
             item_dict['MainImage'] = image_list[0] if len(image_list) >= 1 else ''
             item_dict['Image2'] = image_list[1] if len(image_list) >= 2 else ''

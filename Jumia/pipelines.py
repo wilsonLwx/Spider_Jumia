@@ -17,11 +17,10 @@ class JumiaPipeline(object):
 
     # 爬虫开启的方法
     def open_spider(self, spider):
-        pass
         # 链接数据库
-        # self.client = pymongo.MongoClient('127.0.0.1', 27017)
-        # self.db = self.client['Jumia']
-        # self.collection = self.db['room']
+        self.client = pymongo.MongoClient('127.0.0.1', 27017)
+        self.db = self.client['Jumia']
+        self.collection = self.db['room']
 
     def process_item(self, item, spider):
         self.total_count += 1
@@ -29,7 +28,7 @@ class JumiaPipeline(object):
         # 写入文件名称 名字可自行更改
         file_name = './test2.csv'
         write_csv(dict_data, file_name)
-        # self.collection.insert(dict_data)
+        self.collection.insert(dict_data)
         # return item
         if dict_data:
             self.success_count += 1
@@ -40,5 +39,5 @@ class JumiaPipeline(object):
 
     def close_spider(self, spider):
         print("总共采集{}条，成功{}条，失败{}条".format(self.total_count, self.success_count, self.fail_count))
-        # self.client.close()
+        self.client.close()
         # self.f.close()
