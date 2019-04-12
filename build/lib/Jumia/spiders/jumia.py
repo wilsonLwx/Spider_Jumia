@@ -3,12 +3,13 @@ import re
 import os
 import scrapy
 
+import scrapyd
 
 from Jumia.items import JumiaItem
 from utils.get_conf_data import get_category_id, gen_data
 from utils.write_csv_func import read_csv
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath('__file__')))
+BASE_DIR = os.path.dirname(os.path.realpath('__file__'))
 
 
 class JumiaSpider(scrapy.Spider):

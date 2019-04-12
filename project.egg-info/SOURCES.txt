@@ -1,0 +1,16 @@
+setup.py
+Jumia/__init__.py
+Jumia/items.py
+Jumia/middlewares.py
+Jumia/pipelines.py
+Jumia/settings.py
+Jumia/spiders/__init__.py
+Jumia/spiders/jumia.py
+project.egg-info/PKG-INFO
+project.egg-info/SOURCES.txt
+project.egg-info/dependency_links.txt
+project.egg-info/entry_points.txt
+project.egg-info/top_level.txt
+utils/__init__.py
+utils/get_conf_data.py
+utils/write_csv_func.py
