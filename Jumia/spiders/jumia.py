@@ -8,10 +8,11 @@ from Jumia.items import JumiaItem
 from utils.get_conf_data import get_category_id, gen_data
 from utils.write_csv_func import read_csv
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.realpath('__file__')))
+BASE_DIR = os.path.dirname(os.path.realpath('__file__'))
 
 
 class JumiaSpider(scrapy.Spider):
+    print(BASE_DIR)
     name = 'jumia'
     allowed_domains = ['jumia.com.ng']
     # 此处更换 爬取url
@@ -180,7 +181,7 @@ class JumiaSpider(scrapy.Spider):
 
             cat_str_list = data_element.xpath('./nav/ul/li/a/text()').extract()
             # 调用读取对比文件category_tree_export.csv的方法
-            new_list = read_csv(os.path.join(BASE_DIR, 'conf/category_tree_export.csv'))
+            new_list = read_csv(BASE_DIR + '/conf/category_tree_export.csv')
             new_str = ''.join(cat_str_list)
             # 调用过去PrimaryCategory的方法
             sku_id = get_category_id(new_str, new_list)
